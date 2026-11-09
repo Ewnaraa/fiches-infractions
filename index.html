@@ -20,17 +20,20 @@
   --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --r:10px;
+  --mark-bg:linear-gradient(transparent 62%,rgba(35,64,143,.2) 62%); --mark-ul:transparent; --bold-ink:#0F1A30;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E131E; --surface:#161C29; --sunk:#1D2433; --ink:#E5E9F1; --muted:#99A2B4; --line:#2A3246;
-  --accent:#93ACF2; --accent-ink:#0E131E;
-  --mat:#86A6EE; --mat-bg:#1A2540; --mor:#E5A65A; --mor-bg:#2C2216; --leg:#62C49E; --leg-bg:#15291F;
-  --good:#62C49E; --good-bg:#15291F; --bad:#F08B80; --bad-bg:#331A18; color-scheme:dark}}
+  --bg:#0C111B; --surface:#151B28; --sunk:#1E2635; --ink:#E9EDF4; --muted:#A7B0C2; --line:#323C52;
+  --accent:#9DB4F5; --accent-ink:#0C111B;
+  --mat:#9AB6F2; --mat-bg:#18223A; --mor:#E9B26E; --mor-bg:#2A2117; --leg:#74D0AC; --leg-bg:#14271E;
+  --good:#74D0AC; --good-bg:#14271E; --bad:#F59A90; --bad-bg:#341C1A;
+  --mark-bg:none; --mark-ul:rgba(157,180,245,.75); --bold-ink:#FFFFFF; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0E131E; --surface:#161C29; --sunk:#1D2433; --ink:#E5E9F1; --muted:#99A2B4; --line:#2A3246;
-  --accent:#93ACF2; --accent-ink:#0E131E;
-  --mat:#86A6EE; --mat-bg:#1A2540; --mor:#E5A65A; --mor-bg:#2C2216; --leg:#62C49E; --leg-bg:#15291F;
-  --good:#62C49E; --good-bg:#15291F; --bad:#F08B80; --bad-bg:#331A18; color-scheme:dark}
+  --bg:#0C111B; --surface:#151B28; --sunk:#1E2635; --ink:#E9EDF4; --muted:#A7B0C2; --line:#323C52;
+  --accent:#9DB4F5; --accent-ink:#0C111B;
+  --mat:#9AB6F2; --mat-bg:#18223A; --mor:#E9B26E; --mor-bg:#2A2117; --leg:#74D0AC; --leg-bg:#14271E;
+  --good:#74D0AC; --good-bg:#14271E; --bad:#F59A90; --bad-bg:#341C1A;
+  --mark-bg:none; --mark-ul:rgba(157,180,245,.75); --bold-ink:#FFFFFF; color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
@@ -225,9 +228,9 @@ details.reveal .card{margin-top:10px}
 .pv-row{padding:8px 14px;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.5}
 .pv-row:last-child{border-bottom:0}
 .pv-row > div + div{margin-top:1px}
-.pv b, .check-list b, .rc-title b, .flash b{font-weight:700;color:var(--ink);background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent) 22%,transparent) 62%);border-radius:1px}
+.pv b, .check-list b, .rc-title b, .flash b{font-weight:700;color:var(--bold-ink);background:var(--mark-bg);text-decoration:underline;text-decoration-color:var(--mark-ul);text-decoration-thickness:2px;text-underline-offset:3px;border-radius:1px}
 .pv i, .check-list i, .flash i{color:var(--mor);font-style:italic}
-.pv b i, .check-list b i{color:var(--ink)}
+.pv b i, .check-list b i{color:var(--bold-ink)}
 .pv-sub{background:color-mix(in srgb,var(--accent) 10%,var(--surface));font-style:italic;color:var(--muted)}
 .pv-nota{background:color-mix(in srgb,#7B5CC9 12%,var(--surface));font-size:13.5px}
 .nota-tag{font:700 10.5px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:#6A4BB8;margin-right:4px}
@@ -244,7 +247,7 @@ details.rules{margin-bottom:4px}
 .rules-body ul{margin:4px 0;padding-left:18px}
 .rules-body li{margin:3px 0}
 .key{background:var(--sunk);border-radius:8px;padding:8px 10px}
-.k-b{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent) 22%,transparent) 62%)}
+.k-b{font-weight:700;color:var(--bold-ink);background:var(--mark-bg);text-decoration:underline;text-decoration-color:var(--mark-ul);text-decoration-thickness:2px;text-underline-offset:3px}
 .k-i{font-style:italic;color:var(--mor);margin-left:8px}
 .check-list li.must .i{font-weight:700}
 .check-list li.must.miss{background:var(--bad-bg);border-radius:6px;padding-inline:6px;margin-inline:-6px}
