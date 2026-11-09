@@ -1045,7 +1045,7 @@ function buildCartQuiz(n){
 /* ---- Récitation cartouches ---- */
 function renderRCcart(next){
   if (next || !RC.c || !pool().includes(RC.c)) {
-    const p = pool().filter(c => !c.nota && cLines(c).some(l => l.bold));
+    const p = pool().filter(c => !c.nota);
     const weak = p.filter(c => PROG[c.k] !== 'k');
     const src = weak.length && Math.random() < 0.8 ? weak : p;
     let c = src.length ? pick(src) : null;
@@ -1055,10 +1055,10 @@ function renderRCcart(next){
   const c = RC.c;
   if (!c) { $('rc-panel').innerHTML = `<h2>Récitation</h2><div class="empty">${F.review ? 'Rien n\'est marqué « À revoir » dans cette partie.' : 'Aucun cartouche avec des mentions en gras dans cette partie.'}</div>`; return; }
   $('rc-panel').innerHTML = `
-    <p class="lead" style="margin-bottom:14px">Écris de mémoire les mentions en gras du cartouche : ce sont les seules notées. Les exemples et éléments à adapter au thème s'affichent dans la correction, pour info.</p>
+    <p class="lead" style="margin-bottom:14px">Écris de mémoire le contenu du cartouche : les mentions en gras (éliminatoires) et les rubriques (identité, cadre juridique, annexes…). Les exemples et éléments en italique, à adapter au thème, ne sont pas notés.</p>
     <div class="rc-title"><span class="num">PV</span><div><h2>${fmt(c.t)}</h2><span class="qual">${esc(CTHEMES[c.th].name)}</span></div></div>
     <div class="fields">
-      <div class="field mat"><label for="rc-c">Mentions en gras</label><textarea id="rc-c" placeholder="Une mention par ligne" style="min-height:150px"></textarea></div>
+      <div class="field mat"><label for="rc-c">Contenu du cartouche</label><textarea id="rc-c" placeholder="Une mention par ligne" style="min-height:150px"></textarea></div>
     </div>
     <div class="bar-actions" style="margin-top:14px">
       <button class="btn" id="rc-skip">Passer</button>
@@ -1068,6 +1068,19 @@ function renderRCcart(next){
     <div id="rc-result"></div>`;
   $('rc-skip').addEventListener('click', () => renderRCcart(true));
   $('rc-check').addEventListener('click', rcCheckCart);
+}
+/* Texte à connaître dans une ligne : le gras en entier, le texte normal sans l'italique, sans les parenthèses ni les « ex : » */
+function reqParts(l){
+  let bold = '', normal = '';
+  l.split(/(\*\*.+?\*\*)/g).forEach(ch => {
+    if (!ch) return;
+    if (ch.startsWith('**')) { bold += ' ' + plain(ch); return; }
+    let t = ch.replace(/(^|[\s(>–-])_(.+?)_(?=$|[\s),.;:<–-])/g, '$1').replace(/\([^)]*\)/g, ' ');
+    if (/^\s*ex\s*:/i.test(t)) t = '';
+    normal += ' ' + t.replace(/_/g, '');
+  });
+  const clean = x => x.replace(/^[\s–-]+/, '').replace(/\s+/g, ' ').trim();
+  return { bold: clean(bold), normal: clean(normal) };
 }
 function coveredStrict(item, aw, ratio){
   const kw = [...new Set(kwords(item))];
@@ -1083,10 +1096,11 @@ function rcCheckCart(){
     if (r.type === 'nota') return '';
     return r.lines.map(l => {
       const p = plain(l).replace(/^[–-]\s*/, '');
-      const bold = isBoldLine(l);
-      if (!bold || p.length < 3 || !kwords(p).length) return `<li class="info"><span class="i"></span><span>${fmt(l)}</span></li>`;
-      const boldText = bold ? plain((l.match(/\*\*(.+?)\*\*/g) || []).join(' ')).replace(/^[–-]\s*/, '') : '';
-      const hit = bold && kwords(boldText).length ? coveredStrict(boldText, aw, 0.7) : coveredStrict(p, aw, 0.5);
+      const rq = reqParts(l);
+      const req = (rq.bold + ' ' + rq.normal).trim();
+      const bold = !!rq.bold && kwords(req).length > 0;
+      if (!kwords(req).length) return `<li class="info"><span class="i"></span><span>${fmt(l)}</span></li>`;
+      const hit = bold ? coveredStrict(req, aw, 0.7) : coveredStrict(req, aw, 0.5);
       if (bold) { bTot++; if (hit) bHit++; } else { oTot++; if (hit) oHit++; }
       return `<li class="${hit ? 'hit' : 'miss'}${bold ? ' must' : ''}"><span class="i">${hit ? '✓' : '✗'}</span><span>${fmt(l)}</span></li>`;
     }).join('');
@@ -1095,10 +1109,11 @@ function rcCheckCart(){
   $('rc-result').innerHTML = `
     <hr style="border:0;border-top:1px solid var(--line);margin:20px 0 14px">
     <div class="rc-score">
-      <span class="pill ${allBold ? 'okb' : 'kob'}">Mentions en gras ${bHit}/${bTot}${allBold ? ' · complet' : ' · il en manque'}</span>
+      ${bTot ? `<span class="pill ${allBold ? 'okb' : 'kob'}">Gras ${bHit}/${bTot}${allBold ? '' : ' · éliminatoire'}</span>` : ''}
+      <span class="pill mat">Rubriques ${oHit}/${oTot}</span>
     </div>
     <div class="el mat" style="background:var(--surface);border-color:var(--line)"><h4 style="color:var(--muted)">Correction</h4><ul class="check-list">${rowsHTML}</ul></div>
-    <p class="small" style="margin:12px 0 0">✓ = retrouvé, ✗ = manquant. En gris : exemples et éléments liés au thème, non notés. Les fautes de frappe sont tolérées ; vérifie quand même toi-même.</p>
+    <p class="small" style="margin:12px 0 0">✓ = retrouvé, ✗ = manquant (en rouge si c'est du gras). En gris : exemples et éléments en italique, non notés. Les fautes de frappe sont tolérées ; vérifie quand même toi-même.</p>
     <div class="bar-actions" style="margin-top:14px">
       <span class="spacer"></span>
       <button class="btn bad" id="rc-bad">À revoir<span class="kbd">1</span></button>
