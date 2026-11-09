@@ -242,6 +242,8 @@ details.rules{margin-bottom:4px}
 .k-i{font-style:italic;color:var(--mor);margin-left:8px}
 .check-list li.must .i{font-weight:700}
 .check-list li.must.miss{background:var(--bad-bg);border-radius:6px;padding-inline:6px;margin-inline:-6px}
+.check-list li.info{color:var(--muted);font-size:13.5px;opacity:.75}
+.check-list li.info b{background:none}
 .check-list li.sub-h{font-style:italic;color:var(--muted);padding-top:8px}
 .pill.okb{background:var(--good-bg);color:var(--good)}
 .pill.kob{background:var(--bad-bg);color:var(--bad)}
@@ -1043,7 +1045,7 @@ function buildCartQuiz(n){
 /* ---- Récitation cartouches ---- */
 function renderRCcart(next){
   if (next || !RC.c || !pool().includes(RC.c)) {
-    const p = pool().filter(c => !c.nota);
+    const p = pool().filter(c => !c.nota && cLines(c).some(l => l.bold));
     const weak = p.filter(c => PROG[c.k] !== 'k');
     const src = weak.length && Math.random() < 0.8 ? weak : p;
     let c = src.length ? pick(src) : null;
@@ -1051,12 +1053,12 @@ function renderRCcart(next){
     RC.c = c; RC.done = false;
   }
   const c = RC.c;
-  if (!c) { $('rc-panel').innerHTML = `<h2>Récitation</h2><div class="empty">${F.review ? 'Rien n\'est marqué « À revoir » dans cette partie.' : 'Sélection vide.'}</div>`; return; }
+  if (!c) { $('rc-panel').innerHTML = `<h2>Récitation</h2><div class="empty">${F.review ? 'Rien n\'est marqué « À revoir » dans cette partie.' : 'Aucun cartouche avec des mentions en gras dans cette partie.'}</div>`; return; }
   $('rc-panel').innerHTML = `
-    <p class="lead" style="margin-bottom:14px">Écris de mémoire le contenu du cartouche. Les mentions en gras doivent y être : sans elles, le cartouche vaut 0.</p>
+    <p class="lead" style="margin-bottom:14px">Écris de mémoire les mentions en gras du cartouche : ce sont les seules notées. Les exemples et éléments à adapter au thème s'affichent dans la correction, pour info.</p>
     <div class="rc-title"><span class="num">PV</span><div><h2>${fmt(c.t)}</h2><span class="qual">${esc(CTHEMES[c.th].name)}</span></div></div>
     <div class="fields">
-      <div class="field mat"><label for="rc-c">Contenu du cartouche</label><textarea id="rc-c" placeholder="Une mention par ligne" style="min-height:180px"></textarea></div>
+      <div class="field mat"><label for="rc-c">Mentions en gras</label><textarea id="rc-c" placeholder="Une mention par ligne" style="min-height:150px"></textarea></div>
     </div>
     <div class="bar-actions" style="margin-top:14px">
       <button class="btn" id="rc-skip">Passer</button>
@@ -1081,8 +1083,8 @@ function rcCheckCart(){
     if (r.type === 'nota') return '';
     return r.lines.map(l => {
       const p = plain(l).replace(/^[–-]\s*/, '');
-      if (p.length < 3 || !kwords(p).length) return `<li class="neutral"><span class="i"></span><span>${fmt(l)}</span></li>`;
       const bold = isBoldLine(l);
+      if (!bold || p.length < 3 || !kwords(p).length) return `<li class="info"><span class="i"></span><span>${fmt(l)}</span></li>`;
       const boldText = bold ? plain((l.match(/\*\*(.+?)\*\*/g) || []).join(' ')).replace(/^[–-]\s*/, '') : '';
       const hit = bold && kwords(boldText).length ? coveredStrict(boldText, aw, 0.7) : coveredStrict(p, aw, 0.5);
       if (bold) { bTot++; if (hit) bHit++; } else { oTot++; if (hit) oHit++; }
@@ -1093,11 +1095,10 @@ function rcCheckCart(){
   $('rc-result').innerHTML = `
     <hr style="border:0;border-top:1px solid var(--line);margin:20px 0 14px">
     <div class="rc-score">
-      ${bTot ? `<span class="pill ${allBold ? 'okb' : 'kob'}">Gras ${bHit}/${bTot}${allBold ? '' : ' · éliminatoire'}</span>` : `<span class="pill mat">Pas de mention en gras</span>`}
-      <span class="pill mat">Autres mentions ${oHit}/${oTot}</span>
+      <span class="pill ${allBold ? 'okb' : 'kob'}">Mentions en gras ${bHit}/${bTot}${allBold ? ' · complet' : ' · il en manque'}</span>
     </div>
     <div class="el mat" style="background:var(--surface);border-color:var(--line)"><h4 style="color:var(--muted)">Correction</h4><ul class="check-list">${rowsHTML}</ul></div>
-    <p class="small" style="margin:12px 0 0">Les mentions en gras sont contrôlées plus strictement. ✓ = retrouvé, ✗ = manquant. Les fautes de frappe sont tolérées ; vérifie quand même toi-même.</p>
+    <p class="small" style="margin:12px 0 0">✓ = retrouvé, ✗ = manquant. En gris : exemples et éléments liés au thème, non notés. Les fautes de frappe sont tolérées ; vérifie quand même toi-même.</p>
     <div class="bar-actions" style="margin-top:14px">
       <span class="spacer"></span>
       <button class="btn bad" id="rc-bad">À revoir<span class="kbd">1</span></button>
