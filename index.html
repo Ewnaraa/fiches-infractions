@@ -212,6 +212,31 @@ details.reveal .card{margin-top:10px}
   .rc-title + .fields textarea{min-height:110px}
   #rc-result .bar-actions .btn{flex:1;padding-block:12px}
   #rc-result .bar-actions .spacer{display:none}
+  /* En-tête compact */
+  header.top .wrap{padding-block:12px 10px;gap:8px 16px}
+  .brand .kicker{display:none}
+  .brand h1{font-size:21px;margin:0}
+  .part-switch{margin-top:8px}
+  .mastery{flex-basis:100%;min-width:0}
+  nav.tabs a{padding:10px 11px}
+  .filters{padding-block:10px;gap:8px}
+  /* Barres d'action collées en bas de l'écran */
+  .dock{position:sticky;bottom:0;z-index:4;margin-inline:-16px;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+  .panel .dock{margin-inline:-22px;padding-inline:22px;margin-bottom:-22px;border-radius:0 0 14px 14px}
+  .dock .btn{padding-block:12px}
+  #qz-next,#qz-validate{flex:1}
+  .dock .spacer{display:none}
+  /* Flashcards : une seule zone de boutons, compacte */
+  .fc-actions{display:grid;grid-template-columns:52px 1fr 1fr 52px;gap:8px}
+  .fc-actions .spacer{display:none}
+  #fc-prev{grid-column:1;grid-row:1} #fc-flip{grid-column:2 / 4;grid-row:1} #fc-next{grid-column:4;grid-row:1}
+  #fc-bad{grid-column:1 / 3;grid-row:2}
+  #fc-good{grid-column:3 / 5;grid-row:2}
+  #fc-bad,#fc-good{padding-block:12px}
+  .flash{min-height:240px}
+  .flash .front{padding:26px 18px}
+  .fc-meta{margin-bottom:8px}
+  .fc-meta .btn{padding:7px 11px;font-size:13.5px}
 }
 /* Partie (infractions / cartouches) */
 .part-switch{display:inline-flex;gap:4px;background:var(--sunk);border-radius:10px;padding:3px;margin-top:12px}
@@ -377,7 +402,7 @@ details.rules{margin-bottom:4px}
       </div>
     </div>
     <div class="flash" id="fc-card"></div>
-    <div class="bar-actions fc-actions">
+    <div class="bar-actions fc-actions dock">
       <button class="btn" id="fc-prev" aria-label="Précédente">←</button>
       <button class="btn primary" id="fc-flip">Retourner<span class="kbd">Espace</span></button>
       <button class="btn" id="fc-next" aria-label="Suivante">→</button>
@@ -711,7 +736,7 @@ function renderQuestion(){
     ${q.multi ? '<p class="q-multi">Plusieurs réponses possibles : coche toutes les bonnes, puis valide.</p>' : ''}
     ${q.quote ? `<div class="q-quote" style="font-family:var(--f-mono);font-size:14px">${esc(q.quote)}</div>` : ''}
     <div class="opts">${q.opts.map((o, i) => `<button class="opt${q.multi ? ' multi' : ''}" data-i="${i}"${q.multi ? ' aria-pressed="false"' : ''}><span class="k">${i + 1}</span><span${q.mono ? ' style="font-family:var(--f-mono);font-size:13.5px"' : ''}>${esc(o.v)}</span></button>`).join('')}</div>
-    ${q.multi ? '<div class="bar-actions" style="margin-top:12px"><span class="spacer"></span><button class="btn primary" id="qz-validate" disabled>Valider<span class="kbd">Entrée</span></button></div>' : ''}
+    ${q.multi ? '<div class="bar-actions dock" style="margin-top:12px"><span class="spacer"></span><button class="btn primary" id="qz-validate" disabled>Valider<span class="kbd">Entrée</span></button></div>' : ''}
     <div id="qz-after"></div>`;
   QZ.answered = false; q.sel = new Set();
   if (q.multi) $('qz-validate').addEventListener('click', validateMulti);
@@ -753,7 +778,8 @@ function finishQ(q, ok, picked){
   $('qz-after').innerHTML = `
     <div class="feedback ${ok ? 'ok' : 'ko'}"><b>${ok ? 'Bonne réponse' : q.multi ? `Pas tout à fait : il y avait ${q.opts.filter(o => o.ok).length} bonnes réponses` : 'Mauvaise réponse'}</b>${!ok && q.multi ? '<span style="display:block;font-size:13px;margin-bottom:4px">En pointillés : les bonnes réponses oubliées.</span>' : ''}${q.expl ? esc(q.expl) : name}</div>
     ${it ? `<details class="reveal"><summary>${q.c && PART === 'cart' ? 'Voir le cartouche complet' : 'Voir la fiche complète'}</summary>${q.c ? cartHTML(q.c, { noStatus: true }) : cardHTML(q.e, { noStatus: true })}</details>` : ''}
-    <div class="bar-actions" style="margin-top:14px"><span class="spacer"></span><button class="btn primary" id="qz-next">${last ? 'Voir le résultat' : 'Question suivante'}<span class="kbd">Entrée</span></button></div>`;
+    <div class="bar-actions dock" style="margin-top:14px"><span class="spacer"></span><button class="btn primary" id="qz-next">${last ? 'Voir le résultat' : 'Question suivante'}<span class="kbd">Entrée</span></button></div>`;
+  $('quiz-panel').appendChild($('qz-next').parentElement);
   $('qz-next').addEventListener('click', nextQ);
   $('qz-next').focus({ preventScroll: true });
 }
@@ -884,7 +910,7 @@ function rcCheck(){
     </div>
     ${e.notes.length ? `<div class="notes"><b>À retenir</b><ul>${e.notes.map(n => `<li>${esc(n)}</li>`).join('')}</ul></div>` : ''}
     <p class="small" style="margin:12px 0 0">✓ = retrouvé dans ta réponse, ✗ = manquant. Les fautes de frappe et d'orthographe sont tolérées ; un synonyme, lui, peut ne pas être reconnu.</p>
-    <div class="bar-actions" style="margin-top:14px">
+    <div class="bar-actions dock" style="margin-top:14px">
       <span class="spacer"></span>
       <button class="btn bad" id="rc-bad">À revoir<span class="kbd">1</span></button>
       <button class="btn good" id="rc-good">Je savais<span class="kbd">2</span></button>
@@ -1231,7 +1257,7 @@ function rcCheckCart(){
     </div>
     <div class="el mat" style="background:var(--surface);border-color:var(--line)"><h4 style="color:var(--muted)">Correction</h4><ul class="check-list">${rowsHTML}</ul></div>
     <p class="small" style="margin:12px 0 0">✓ = retrouvé, ✗ = manquant (en rouge si c'est du gras). En gris : exemples et éléments en italique, non notés. Les fautes de frappe sont tolérées ; vérifie quand même toi-même.</p>
-    <div class="bar-actions" style="margin-top:14px">
+    <div class="bar-actions dock" style="margin-top:14px">
       <span class="spacer"></span>
       <button class="btn bad" id="rc-bad">À revoir<span class="kbd">1</span></button>
       <button class="btn good" id="rc-good">Je savais<span class="kbd">2</span></button>
