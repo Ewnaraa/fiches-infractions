@@ -333,16 +333,84 @@ details.rules{margin-bottom:4px}
 .toast.k{background:var(--good-bg);color:var(--good);border:1px solid var(--good)}
 .toast.v{background:var(--mor-bg);color:var(--mor);border:1px solid var(--mor)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ===== Finition « pro » ===== */
+header.top{border-bottom:1px solid var(--line);background:var(--surface)}
+.appbar{border-bottom:1px solid var(--line)}
+.appbar .wrap{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;padding-block:10px}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font:700 11px/1 var(--f-mono);letter-spacing:.06em}
+.logo .appname{font:600 15px/1 var(--f-body);letter-spacing:-.01em}
+.appbar .part-switch{margin:0 0 0 auto}
+header.top .wrap.hero{padding-block:22px 18px;display:flex;flex-wrap:wrap;gap:14px 32px;align-items:flex-end;justify-content:space-between}
+.brand h1{margin-top:8px}
+.mastery .row{margin-bottom:2px}
+.bar{height:8px;border-radius:4px}
+.bar .k{border-radius:4px 0 0 4px}
+nav.tabs{box-shadow:0 1px 0 var(--line)}
+nav.tabs a{font-weight:600;font-size:14.5px;transition:color .15s}
+.filters select{appearance:none;-webkit-appearance:none;padding-right:36px;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 52%,calc(100% - 13px) 52%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;cursor:pointer}
+.filters select,.filters input[type=search]{height:42px;border-radius:10px;transition:border-color .15s,box-shadow .15s}
+.filters select:hover,.filters input[type=search]:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.filters select:focus-visible,.filters input[type=search]:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 20%,transparent)}
+.filters .check{height:42px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-weight:500}
+.filters .check:has(input:checked){border-color:var(--mor);background:var(--mor-bg);color:var(--mor)}
+.card{border-radius:14px;box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 6%,transparent)}
+.card h3{font-size:20px}
+.num{background:color-mix(in srgb,var(--accent) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+.el{border-radius:10px;border-left-width:3px}
+.el h4{margin-bottom:8px}
+.status{gap:0;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
+.status button{border:0;border-radius:0;padding:6px 11px;font-size:12.5px;font-weight:500;display:inline-flex;align-items:center;gap:5px;color:var(--muted)}
+.status button + button{border-left:1px solid var(--line)}
+.status button:hover{color:var(--ink);background:var(--sunk)}
+.status button .ico{font-size:12px;line-height:1}
+.status button.on-k{background:var(--good-bg);color:var(--good)}
+.status button.on-v{background:var(--mor-bg);color:var(--mor)}
+.theme-head{margin:34px 0 12px;color:var(--ink);font-size:12px}
+.theme-head::after{background:var(--line)}
+.btn{border-radius:10px;font-weight:600;transition:background .15s,border-color .15s,transform .05s}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn.primary:hover:not(:disabled){background:color-mix(in srgb,var(--accent) 88%,var(--ink))}
+.panel{border-radius:16px;box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 6%,transparent)}
+.opt{border-radius:12px;padding:13px 15px;transition:border-color .15s,background .15s}
+.opt .k{min-width:24px;text-align:center}
+.flash{border-radius:16px;box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 6%,transparent),0 8px 24px -12px color-mix(in srgb,var(--ink) 18%,transparent)}
+.flash .front{background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 6%,var(--surface)),var(--surface) 60%);border-radius:16px}
+.flash .front .theme{background:var(--sunk);padding:6px 10px;border-radius:999px}
+details.legend{border-radius:12px}
+details.legend summary{list-style:none;display:flex;align-items:center;gap:8px}
+details.legend summary::-webkit-details-marker{display:none}
+details.legend summary::before{content:"";width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s;margin-right:4px}
+details.legend[open] summary::before{transform:rotate(45deg)}
+.site-foot{color:var(--muted);font-size:12.5px;padding-block:28px 8px;border-top:1px solid var(--line);margin-top:36px;display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+@media (max-width:560px){
+  .appbar .wrap{padding-block:8px;gap:8px 12px}
+  .logo .appname{display:none}
+  .logo .mark{width:30px;height:30px;border-radius:8px;font-size:10px}
+  .appbar .part-switch{margin:0 0 0 auto}
+  header.top .wrap.hero{padding-block:12px 12px;gap:8px}
+  .brand h1{margin-top:0;font-size:21px}
+  .filters select,.filters input[type=search],.filters .check{height:40px}
+  .card h3{font-size:18px}
+  .card-head > div:not(.status){flex:1 1 calc(100% - 64px)}
+  .card-head .status{padding-left:0;margin-left:52px;flex-basis:auto}
+  .flash{min-height:max(240px,calc(100dvh - 460px))}
+  .flash{min-height:max(240px,calc(100dvh - 430px))}
+}
 </style>
 
 </head>
 <body>
 <header class="top">
-  <div class="wrap">
+  <div class="appbar"><div class="wrap">
+    <a class="logo" href="#fiches" aria-label="Révisions OPJ, accueil"><span class="mark">OPJ</span><span class="appname">Révisions OPJ</span></a>
+    <nav class="part-switch" aria-label="Partie"><a href="#fiches" data-part="inf">Infractions</a><a href="#c-fiches" data-part="cart">Cartouches</a><a href="#p-fiches" data-part="proc">Procédure</a></nav>
+  </div></div>
+  <div class="wrap hero">
     <div class="brand">
       <div class="kicker" id="h-kicker">Droit pénal général et spécial</div>
       <h1 id="h-title">Fiches infractions DPG-DPS</h1>
-      <nav class="part-switch" aria-label="Partie"><a href="#fiches" data-part="inf">Infractions</a><a href="#c-fiches" data-part="cart">Cartouches</a><a href="#p-fiches" data-part="proc">Procédure</a></nav>
     </div>
     <div class="mastery" aria-live="polite">
       <div class="row"><span><b id="m-known">0</b> maîtrisées · <span id="m-review">0</span> à revoir</span><span id="m-total">/ 157</span></div>
@@ -425,6 +493,7 @@ details.rules{margin-bottom:4px}
     <div class="panel" id="rc-panel"></div>
   </section>
 
+  <footer class="site-foot"><span>Révisions OPJ · fiches DPG-DPS, articulation de procédure, procédure pénale</span></footer>
 </main>
 
 <script>
@@ -544,8 +613,8 @@ function cardHTML(e, opts = {}){
       <span class="num">N° ${e.n}</span>
       <div style="flex:1;min-width:0"><h3>${hl(e.t)}</h3><span class="qual">${esc(e.q)}</span></div>
       ${opts.noStatus ? '' : `<div class="status">
-        <button data-st="k" data-n="${e.k}" class="${st === 'k' ? 'on-k' : ''}" aria-pressed="${st === 'k'}">Je sais</button>
-        <button data-st="v" data-n="${e.k}" class="${st === 'v' ? 'on-v' : ''}" aria-pressed="${st === 'v'}">À revoir</button>
+        <button data-st="k" data-n="${e.k}" class="${st === 'k' ? 'on-k' : ''}" aria-pressed="${st === 'k'}"><span class="ico" aria-hidden="true">✓</span>Je sais</button>
+        <button data-st="v" data-n="${e.k}" class="${st === 'v' ? 'on-v' : ''}" aria-pressed="${st === 'v'}"><span class="ico" aria-hidden="true">↻</span>À revoir</button>
       </div>`}
     </div>
     <div class="els cols">
@@ -603,7 +672,7 @@ function renderFC(){
     box.innerHTML = `<div class="front" role="button" tabindex="0" aria-label="Retourner la carte">
       <span class="theme">${esc(CTHEMES[e.th].name)}</span>
       <h2>${fmt(e.t.replace(/^NOTA\s*–\s*/, e.nota ? 'Nota : ' : ''))}</h2>
-      <span class="qual">${e.nota ? 'Note de l\'articulation' : 'P.V. N° · JJ/MM/AA à ..h.. · OPJ'}</span>
+      <span class="qual">${e.nota ? 'Note de l\'articulation' : PART === 'proc' ? `${e.rows.length} point${e.rows.length > 1 ? 's' : ''} à connaître` : 'P.V. N° · JJ/MM/AA à ..h.. · OPJ'}</span>
       <span class="hint">${e.nota ? 'Que dit cette note ?' : `Récite le contenu ${PART === 'proc' ? 'de la fiche' : 'du cartouche'}, en particulier les mentions en gras.`} Touche la carte pour la retourner.</span>
     </div>`;
     box.querySelector('.front').addEventListener('click', flip);
@@ -977,8 +1046,8 @@ function cartHTML(c, opts = {}){
     return `<div class="pv-row">${r.lines.map(l => `<div>${hlc(l)}</div>`).join('')}</div>`;
   }).join('');
   const status = (opts.noStatus || c.ex) ? '' : `<div class="status">
-      <button data-st="k" data-n="${c.k}" class="${st === 'k' ? 'on-k' : ''}" aria-pressed="${st === 'k'}">Je sais</button>
-      <button data-st="v" data-n="${c.k}" class="${st === 'v' ? 'on-v' : ''}" aria-pressed="${st === 'v'}">À revoir</button>
+      <button data-st="k" data-n="${c.k}" class="${st === 'k' ? 'on-k' : ''}" aria-pressed="${st === 'k'}"><span class="ico" aria-hidden="true">✓</span>Je sais</button>
+      <button data-st="v" data-n="${c.k}" class="${st === 'v' ? 'on-v' : ''}" aria-pressed="${st === 'v'}"><span class="ico" aria-hidden="true">↻</span>À revoir</button>
     </div>`;
   if (c.nota) return `<article class="card pv pv-isnota" id="${c.k}">
     <div class="pv-left"><b>NOTA</b></div>
