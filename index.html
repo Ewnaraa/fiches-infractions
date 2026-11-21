@@ -1476,10 +1476,10 @@ function celebrate(msg){
   document.body.appendChild(box); setTimeout(() => box.remove(), 2800);
 }
 
-/* Cartes concernées : infractions + procédure, sans cartouches ni rapport de synthèse */
+/* Cartes concernées : infractions et cartouches (sans l'exemple Foxtrot) */
 function jourPool(){
   const out = ITEMS.map(e => ({ p: 'inf', it: e }));
-  DS.proc.items.forEach(c => { if (!c.nota && !c.ex && !/synth[eè]se/i.test(DS.proc.themes[c.th].name)) out.push({ p: 'proc', it: c }); });
+  DS.cart.items.forEach(c => { if (!c.nota && !c.ex) out.push({ p: 'cart', it: c }); });
   return out;
 }
 function jourPlan(){
@@ -1560,7 +1560,7 @@ function renderJour(){
     </div>
     <details class="legend jour-help"><summary>Comment ça marche</summary>
       <p class="small">Chaque jour, le site te propose les cartes à revoir au bon moment, plus quelques nouvelles. Une carte réussie revient dans 1, 2, 4, 8, 16… jours ; une carte ratée revient le lendemain. Tes réponses dans les flashcards, le quiz et la récitation comptent aussi.</p>
-      <p class="small">Inclus : les 157 infractions et les fiches de procédure. Les cartouches et le rapport de synthèse ne sont pas dans la révision du jour.</p>
+      <p class="small">Inclus : les 157 infractions et les 65 cartouches. La partie Procédure et l'exemple Foxtrot n'en font pas partie.</p>
     </details>`;
   box.querySelectorAll('[data-goal]').forEach(b => b.addEventListener('click', () => { STATS.goal = +b.dataset.goal; saveST(); updateChip(); renderJour(); }));
   const go = $('j-go'); if (go) go.addEventListener('click', () => jourStart());
@@ -1570,8 +1570,8 @@ function renderJourCard(){
   const box = $('jour-panel'), x = J.q[J.i], e = x.it;
   const front = x.p === 'inf'
     ? `<span class="theme">N° ${e.n} · ${esc(THEMES[e.th].name)}</span><h2>${esc(e.t)}</h2><span class="qual">${esc(e.q)}</span><div class="dots"><span class="d1">Matériel</span><span class="d2">Moral</span><span class="d3">Légal</span></div>`
-    : `<span class="theme">${esc(DS.proc.themes[e.th].name)}</span><h2>${fmt(e.t)}</h2><span class="qual">Procédure</span>`;
-  const back = x.p === 'inf' ? withPart('inf', () => cardHTML(e, { noStatus: true })) : withPart('proc', () => cartHTML(e, { noStatus: true }));
+    : `<span class="theme">${esc(DS[x.p].themes[e.th].name)}</span><h2>${fmt(e.t)}</h2><span class="qual">${x.p === 'cart' ? 'Cartouche · récite les mentions en gras' : 'Procédure'}</span>`;
+  const back = x.p === 'inf' ? withPart('inf', () => cardHTML(e, { noStatus: true })) : withPart(x.p, () => cartHTML(e, { noStatus: true }));
   box.innerHTML = `
     <div class="fc-meta"><span>${J.i + 1} / ${J.q.length}</span><span class="pill ${x.kind === 'new' ? 'mat' : 'mor'}">${x.kind === 'new' ? 'Nouvelle' : x.kind === 'again' ? 'À reprendre' : 'À revoir'}</span></div>
     <div class="q-progress"><i style="width:${J.i / J.q.length * 100}%"></i></div>
@@ -1623,7 +1623,7 @@ function show(){
   const p = h.startsWith('c-') ? 'cart' : h.startsWith('p-') ? 'proc' : 'inf';
   if (p !== 'inf') h = h.slice(2);
   if (!isJour) setPart(p);
-  else { document.querySelectorAll('.part-switch a').forEach(a => a.removeAttribute('aria-current')); $('h-title').textContent = 'Révision du jour'; $('h-kicker').textContent = 'Répétition espacée · infractions et procédure'; }
+  else { document.querySelectorAll('.part-switch a').forEach(a => a.removeAttribute('aria-current')); $('h-title').textContent = 'Révision du jour'; $('h-kicker').textContent = 'Répétition espacée · infractions et cartouches'; }
   document.body.classList.toggle('in-jour', isJour);
   $('streak-chip').toggleAttribute('aria-current', isJour);
   currentView = VIEWS.includes(h) ? h : 'fiches';
