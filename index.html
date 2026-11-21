@@ -404,6 +404,67 @@ details.legend[open] summary::before{transform:rotate(45deg)}
 .to-top.on{opacity:1;transform:none;pointer-events:auto}
 .to-top:hover{border-color:var(--accent);color:var(--accent)}
 .to-top svg{width:20px;height:20px}
+
+/* Révision du jour */
+.streak-chip{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px 0 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:500;transition:border-color .15s,background .15s}
+.streak-chip:hover,.streak-chip[aria-current]{border-color:var(--mor);background:var(--mor-bg)}
+.streak-chip .fl{color:var(--mor);display:grid}
+.streak-chip .fl svg{width:17px;height:17px}
+.streak-chip b{font:700 14px var(--f-body);font-variant-numeric:tabular-nums}
+.streak-chip .sc-goal{font:600 11.5px var(--f-mono);color:var(--muted);padding-left:8px;border-left:1px solid var(--line)}
+.streak-chip.done .sc-goal{color:var(--good)}
+body.in-jour .filters,body.in-jour .mastery{display:none}
+#v-jour{padding-top:18px}
+body.in-jour nav.tabs a[aria-current]{border-bottom-color:transparent;color:var(--muted)}
+.jour-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.jour-stat{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.flame-big{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--mor-bg);color:var(--mor)}
+.flame-big svg{width:30px;height:30px}
+.big-n{font:700 34px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.ring-wrap{position:relative;width:64px;height:64px;flex:0 0 auto}
+.ring{width:64px;height:64px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:8}
+.ring-bg{stroke:var(--sunk)}
+.ring-fg{stroke:var(--good);stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.3,1)}
+.ring-wrap b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 16px var(--f-body);font-variant-numeric:tabular-nums}
+.ring-wrap b small{font-size:11px;color:var(--muted);font-weight:500}
+.seg-sm{margin-top:6px}
+.seg-sm button{padding:5px 11px;font-size:13px}
+.jour-week{grid-column:1 / -1;display:flex;justify-content:space-between;gap:6px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.wk{display:flex;flex-direction:column;align-items:center;gap:6px;font:600 11px var(--f-mono);color:var(--muted);flex:1}
+.wk i{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);display:block}
+.wk.part i{border-color:var(--good);background:color-mix(in srgb,var(--good) 25%,transparent)}
+.wk.full i{border-color:var(--good);background:var(--good)}
+.wk.today span{color:var(--ink)}
+.jour-todo{margin-top:18px;display:flex;flex-direction:column;gap:14px}
+.todo-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.todo-nums div{display:flex;flex-direction:column;gap:2px}
+.todo-nums b{font:700 26px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.todo-nums b small{font-size:14px;color:var(--muted)}
+.todo-nums span{font-size:13px;color:var(--muted)}
+.btn.big{padding:14px 18px;font-size:15.5px}
+.jour-help{margin-top:18px}
+.jour-help p{margin:8px 0 0;max-width:68ch}
+.jour-dock{display:flex!important}
+.jour-dock .btn{flex:1}
+.jour-end{text-align:left}
+.celebrate{position:fixed;left:50%;top:calc(18px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:30;background:var(--surface);border:1px solid var(--good);border-radius:14px;padding:12px 18px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 12px 30px -10px color-mix(in srgb,var(--ink) 35%,transparent);animation:rise .35s ease-out;text-align:center;max-width:calc(100% - 32px)}
+.celebrate b{color:var(--good)}
+.celebrate span{font-size:13px;color:var(--muted)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:29;overflow:hidden}
+.confetti i{position:absolute;top:-12px;width:8px;height:12px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),105vh) rotate(var(--r));opacity:.6}}
+@media (max-width:560px){
+  .appbar .logo{display:none}
+  .appbar .wrap{flex-wrap:nowrap}
+  .streak-chip{height:32px;padding:0 9px;gap:4px}
+  .streak-chip .sc-lab,.streak-chip .sc-goal{display:none}
+  .appbar .part-switch{margin-left:auto}
+  .jour-grid{grid-template-columns:1fr;gap:10px}
+  .jour-stat{padding:12px}
+  .todo-nums b{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){.confetti{display:none}}
 </style>
 
 </head>
@@ -411,6 +472,7 @@ details.legend[open] summary::before{transform:rotate(45deg)}
 <header class="top">
   <div class="appbar"><div class="wrap">
     <a class="logo" href="#fiches" aria-label="Révisions OPJ, accueil"><span class="mark">OPJ</span><span class="appname">Révisions OPJ</span></a>
+    <a class="streak-chip" id="streak-chip" href="#jour"><span class="fl"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.6 2.2c.4 3-1 4.8-2.6 6.6C8.4 10.6 7 12.4 7 15a5 5 0 0 0 10 0c0-1.7-.6-3-1.5-4.1-.2 1.3-.9 2.3-1.9 2.8.4-2.9-.4-6.8-1-11.5Z"/></svg></span><b id="sc-n">0</b><span class="sc-lab">Révision du jour</span><span class="sc-goal" id="sc-goal">0/20</span></a>
     <nav class="part-switch" aria-label="Partie"><a href="#fiches" data-part="inf">Infractions</a><a href="#c-fiches" data-part="cart">Cartouches</a><a href="#p-fiches" data-part="proc">Procédure</a></nav>
   </div></div>
   <div class="wrap hero">
@@ -489,6 +551,11 @@ details.legend[open] summary::before{transform:rotate(45deg)}
     </div>
   </section>
 
+  <!-- RÉVISION DU JOUR -->
+  <section class="view" id="v-jour" hidden>
+    <div class="panel" id="jour-panel"></div>
+  </section>
+
   <!-- QUIZ -->
   <section class="view" id="v-quiz" hidden>
     <div class="panel" id="quiz-panel"></div>
@@ -542,7 +609,7 @@ let PROG = {};
 try { PROG = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) { PROG = {}; }
 function save(){ try { localStorage.setItem(KEY, JSON.stringify(PROG)); } catch (_) {} }
 function setStatus(n, s){ if (PROG[n] === s) delete PROG[n]; else PROG[n] = s; save(); updateMastery(); }
-function mark(n, s){ PROG[n] = s; save(); updateMastery(); }
+function mark(n, s){ PROG[n] = s; save(); updateMastery(); srsGrade(n, s === 'k'); tick(); }
 function toast(s){
   const t = document.createElement('div');
   t.className = 'toast ' + s; t.textContent = s === 'k' ? '+1 maîtrisée' : 'À revoir';
@@ -857,7 +924,7 @@ function finishQ(q, ok, picked){
   });
   const v = $('qz-validate'); if (v) v.parentElement.remove();
   const it = q.e || q.c;
-  if (ok) QZ.score++; else if (it) { QZ.missed.push(it.k); mark(it.k, 'v'); } else QZ.missed.push('q:' + q.prompt);
+  if (ok) { QZ.score++; tick(); } else if (it) { QZ.missed.push(it.k); mark(it.k, 'v'); } else QZ.missed.push('q:' + q.prompt);
   const last = QZ.i === QZ.qs.length - 1;
   const name = q.e ? `N° ${q.e.n} · ${esc(q.e.t)}` : q.c ? esc(cTitle(q.c)) : '';
   $('qz-after').innerHTML = `
@@ -1353,8 +1420,189 @@ function rcCheckCart(){
   $('rc-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+const FLAME = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.6 2.2c.4 3-1 4.8-2.6 6.6C8.4 10.6 7 12.4 7 15a5 5 0 0 0 10 0c0-1.7-.6-3-1.5-4.1-.2 1.3-.9 2.3-1.9 2.8.4-2.9-.4-6.8-1-11.5Z"/></svg>';
+
+/* ================= RÉVISION DU JOUR (répétition espacée) + SÉRIE ================= */
+const SRS_KEY = KEY + '-srs', ST_KEY = KEY + '-stats';
+const INTERVALS = [0, 1, 2, 4, 8, 16, 32, 64];
+let SRS = {}, STATS = { days: {}, goal: 20, news: {} };
+try { SRS = JSON.parse(localStorage.getItem(SRS_KEY) || '{}') || {}; } catch (_) { SRS = {}; }
+try { STATS = Object.assign(STATS, JSON.parse(localStorage.getItem(ST_KEY) || '{}') || {}); } catch (_) {}
+const saveSRS = () => { try { localStorage.setItem(SRS_KEY, JSON.stringify(SRS)); } catch (_) {} };
+const saveST = () => { try { localStorage.setItem(ST_KEY, JSON.stringify(STATS)); } catch (_) {} };
+const dayNum = (d = new Date()) => Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 86400000);
+const today = () => dayNum();
+const todayCount = () => STATS.days[today()] || 0;
+function streak(){
+  let d = today(), n = 0;
+  if (!STATS.days[d]) d--;
+  while (STATS.days[d] > 0) { n++; d--; }
+  return n;
+}
+function srsGrade(k, ok){
+  const s = SRS[k] || { b: 0 };
+  if (ok) { s.b = Math.min((s.b || 0) + 1, INTERVALS.length - 1); s.d = today() + INTERVALS[s.b]; }
+  else { s.b = 1; s.d = today() + 1; }
+  SRS[k] = s; saveSRS();
+}
+function tick(){
+  const t = today(), before = STATS.days[t] || 0;
+  STATS.days[t] = before + 1; saveST();
+  updateChip();
+  if (before + 1 === STATS.goal) celebrate(`Objectif du jour atteint : ${STATS.goal} cartes !`);
+}
+function updateChip(){
+  const n = streak(), c = todayCount(), g = STATS.goal;
+  const el = $('sc-n'); if (!el) return;
+  el.textContent = n;
+  $('sc-goal').textContent = `${Math.min(c, g)}/${g}`;
+  $('streak-chip').classList.toggle('done', c >= g);
+  $('streak-chip').setAttribute('aria-label', `Révision du jour : série de ${n} jour${n > 1 ? 's' : ''}, ${Math.min(c, g)} cartes sur ${g} aujourd'hui`);
+}
+function celebrate(msg){
+  const t = document.createElement('div'); t.className = 'celebrate'; t.setAttribute('role', 'status');
+  t.innerHTML = `<b>${esc(msg)}</b><span>Série : ${streak()} jour${streak() > 1 ? 's' : ''}</span>`;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 3200);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cols = ['var(--accent)', 'var(--good)', 'var(--mor)', 'var(--mat)', 'var(--leg)'];
+  const box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden', 'true');
+  for (let i = 0; i < 48; i++) {
+    const p = document.createElement('i');
+    p.style.left = (Math.random() * 100) + '%'; p.style.background = cols[i % cols.length];
+    p.style.animationDelay = (Math.random() * .35) + 's'; p.style.animationDuration = (1.4 + Math.random()) + 's';
+    p.style.setProperty('--dx', ((Math.random() - .5) * 160) + 'px'); p.style.setProperty('--r', (Math.random() * 720) + 'deg');
+    box.appendChild(p);
+  }
+  document.body.appendChild(box); setTimeout(() => box.remove(), 2800);
+}
+
+/* Cartes concernées : infractions + procédure, sans cartouches ni rapport de synthèse */
+function jourPool(){
+  const out = ITEMS.map(e => ({ p: 'inf', it: e }));
+  DS.proc.items.forEach(c => { if (!c.nota && !c.ex && !/synth[eè]se/i.test(DS.proc.themes[c.th].name)) out.push({ p: 'proc', it: c }); });
+  return out;
+}
+function jourPlan(){
+  const t = today(), pool = jourPool();
+  const due = pool.filter(x => SRS[x.it.k] && SRS[x.it.k].d <= t).sort((a, b) => SRS[a.it.k].d - SRS[b.it.k].d);
+  const fresh = pool.filter(x => !SRS[x.it.k]);
+  fresh.sort((a, b) => (PROG[b.it.k] === 'v') - (PROG[a.it.k] === 'v'));
+  const newsDone = STATS.news[t] || 0;
+  const nNew = Math.max(0, Math.min(fresh.length, Math.max(5, STATS.goal - due.length) - newsDone));
+  return { due, fresh: fresh.slice(0, nNew), pool };
+}
+function withPart(p, fn){
+  const sp = PART, sc = CARTS, st = CTHEMES;
+  PART = p; if (p !== 'inf') { CARTS = DS[p].items; CTHEMES = DS[p].themes; }
+  try { return fn(); } finally { PART = sp; CARTS = sc; CTHEMES = st; }
+}
+const J = { q: [], i: 0, flipped: false, ok: 0, ko: 0, requeued: new Set(), active: false };
+function jourStart(extraNew){
+  const plan = jourPlan();
+  let fresh = plan.fresh;
+  if (extraNew) fresh = plan.pool.filter(x => !SRS[x.it.k]).slice(0, extraNew);
+  J.q = [...plan.due.map(x => ({ ...x, kind: 'due' })), ...shuffle(fresh).map(x => ({ ...x, kind: 'new' }))];
+  J.i = 0; J.flipped = false; J.ok = 0; J.ko = 0; J.requeued = new Set(); J.active = J.q.length > 0;
+  renderJour();
+}
+function weekStrip(){
+  const t = today(), names = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+  let h = '';
+  for (let d = t - 6; d <= t; d++) {
+    const c = STATS.days[d] || 0, wd = new Date((d * 86400000) + new Date().getTimezoneOffset() * 60000).getDay();
+    const cls = c >= STATS.goal ? 'full' : c > 0 ? 'part' : '';
+    h += `<div class="wk ${cls}${d === t ? ' today' : ''}" title="${c} carte${c > 1 ? 's' : ''}"><span>${names[wd]}</span><i></i></div>`;
+  }
+  return h;
+}
+function ring(v, max){
+  const r = 34, c = 2 * Math.PI * r, f = Math.min(1, max ? v / max : 0);
+  return `<svg class="ring" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="${r}" class="ring-bg"/><circle cx="40" cy="40" r="${r}" class="ring-fg" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - f)}"/></svg>`;
+}
+function renderJour(){
+  const box = $('jour-panel');
+  if (J.active && J.i < J.q.length) return renderJourCard();
+  if (J.active && J.i >= J.q.length) {
+    J.active = false;
+    const tot = J.ok + J.ko;
+    box.innerHTML = `<div class="jour-end">
+      <div class="q-kind mat">Session terminée</div>
+      <div class="score stamped">${J.ok}<small> / ${tot}</small></div>
+      <p class="lead" style="margin-top:8px">${J.ko ? `${J.ko} carte${J.ko > 1 ? 's' : ''} reviendr${J.ko > 1 ? 'ont' : 'a'} demain. Les autres reviendront de plus en plus espacées.` : 'Sans faute. Ces cartes reviendront dans quelques jours.'}</p>
+      <div class="bar-actions" style="margin-top:16px"><button class="btn primary" id="j-back">Retour au tableau du jour</button></div>
+    </div>`;
+    $('j-back').addEventListener('click', renderJour);
+    return;
+  }
+  const plan = jourPlan(), n = streak(), c = todayCount(), g = STATS.goal;
+  const total = plan.due.length + plan.fresh.length;
+  const learned = plan.pool.filter(x => SRS[x.it.k]).length;
+  box.innerHTML = `
+    <div class="jour-grid">
+      <div class="jour-stat">
+        <div class="flame-big" aria-hidden="true">${FLAME}</div>
+        <div><div class="big-n">${n}</div><div class="small">jour${n > 1 ? 's' : ''} d'affilée</div></div>
+      </div>
+      <div class="jour-stat">
+        <div class="ring-wrap">${ring(c, g)}<b>${Math.min(c, g)}<small>/${g}</small></b></div>
+        <div><div class="small">Objectif du jour</div><div class="seg seg-sm" role="group" aria-label="Objectif quotidien">${[10, 20, 40].map(v => `<button data-goal="${v}" aria-pressed="${g === v}">${v}</button>`).join('')}</div></div>
+      </div>
+      <div class="jour-week" aria-label="7 derniers jours">${weekStrip()}</div>
+    </div>
+    <div class="jour-todo">
+      <div class="todo-nums">
+        <div><b>${plan.due.length}</b><span>à revoir aujourd'hui</span></div>
+        <div><b>${plan.fresh.length}</b><span>nouvelles cartes</span></div>
+        <div><b>${learned}<small>/${plan.pool.length}</small></b><span>déjà vues</span></div>
+      </div>
+      ${total ? `<button class="btn primary big" id="j-go">Commencer la révision (${total} carte${total > 1 ? 's' : ''})</button>`
+        : `<p class="small" style="margin:0">Tout est à jour pour aujourd'hui.</p><button class="btn big" id="j-more">Avancer : 10 nouvelles cartes</button>`}
+    </div>
+    <details class="legend jour-help"><summary>Comment ça marche</summary>
+      <p class="small">Chaque jour, le site te propose les cartes à revoir au bon moment, plus quelques nouvelles. Une carte réussie revient dans 1, 2, 4, 8, 16… jours ; une carte ratée revient le lendemain. Tes réponses dans les flashcards, le quiz et la récitation comptent aussi.</p>
+      <p class="small">Inclus : les 157 infractions et les fiches de procédure. Les cartouches et le rapport de synthèse ne sont pas dans la révision du jour.</p>
+    </details>`;
+  box.querySelectorAll('[data-goal]').forEach(b => b.addEventListener('click', () => { STATS.goal = +b.dataset.goal; saveST(); updateChip(); renderJour(); }));
+  const go = $('j-go'); if (go) go.addEventListener('click', () => jourStart());
+  const more = $('j-more'); if (more) more.addEventListener('click', () => jourStart(10));
+}
+function renderJourCard(){
+  const box = $('jour-panel'), x = J.q[J.i], e = x.it;
+  const front = x.p === 'inf'
+    ? `<span class="theme">N° ${e.n} · ${esc(THEMES[e.th].name)}</span><h2>${esc(e.t)}</h2><span class="qual">${esc(e.q)}</span><div class="dots"><span class="d1">Matériel</span><span class="d2">Moral</span><span class="d3">Légal</span></div>`
+    : `<span class="theme">${esc(DS.proc.themes[e.th].name)}</span><h2>${fmt(e.t)}</h2><span class="qual">Procédure</span>`;
+  const back = x.p === 'inf' ? withPart('inf', () => cardHTML(e, { noStatus: true })) : withPart('proc', () => cartHTML(e, { noStatus: true }));
+  box.innerHTML = `
+    <div class="fc-meta"><span>${J.i + 1} / ${J.q.length}</span><span class="pill ${x.kind === 'new' ? 'mat' : 'mor'}">${x.kind === 'new' ? 'Nouvelle' : x.kind === 'again' ? 'À reprendre' : 'À revoir'}</span></div>
+    <div class="q-progress"><i style="width:${J.i / J.q.length * 100}%"></i></div>
+    <div class="flash" id="j-card">${J.flipped ? `<div class="back">${back}</div>` : `<div class="front" role="button" tabindex="0" aria-label="Voir la réponse">${front}<span class="hint">Récite, puis touche la carte pour voir la réponse.</span></div>`}</div>
+    <div class="bar-actions dock fc-actions jour-dock">
+      ${J.flipped ? `<button class="btn bad" id="j-ko">Je ne savais pas<span class="kbd">1</span></button><button class="btn good" id="j-ok">Je savais<span class="kbd">2</span></button>`
+        : `<button class="btn primary" id="j-flip">Voir la réponse<span class="kbd">Espace</span></button>`}
+    </div>`;
+  const card = $('j-card');
+  card.classList.add(J.flipped ? 'flip-in' : 'slide-l');
+  if (!J.flipped) { card.querySelector('.front').addEventListener('click', jourFlip); $('j-flip').addEventListener('click', jourFlip); }
+  else {
+    $('j-ok').addEventListener('click', () => jourGrade(true)); $('j-ko').addEventListener('click', () => jourGrade(false));
+    if (matchMedia('(max-width:560px)').matches) {
+      const nav = document.querySelector('nav.tabs');
+      scrollTo({ top: card.getBoundingClientRect().top + scrollY - (nav ? nav.offsetHeight : 0) - 8, behavior: 'smooth' });
+    }
+  }
+}
+function jourFlip(){ if (!J.active) return; J.flipped = true; renderJourCard(); }
+function jourGrade(ok){
+  if (!J.active || !J.flipped) return;
+  const x = J.q[J.i];
+  if (x.kind === 'new') { STATS.news[today()] = (STATS.news[today()] || 0) + 1; saveST(); }
+  mark(x.it.k, ok ? 'k' : 'v'); toast(ok ? 'k' : 'v');
+  if (ok) J.ok++; else { J.ko++; if (!J.requeued.has(x.it.k)) { J.requeued.add(x.it.k); J.q.push({ ...x, kind: 'again' }); } }
+  J.i++; J.flipped = false; renderJour();
+}
+
 /* ---------- Navigation ---------- */
-const VIEWS = ['fiches', 'flashcards', 'quiz', 'recitation'];
+const VIEWS = ['fiches', 'flashcards', 'quiz', 'recitation', 'jour'];
 let currentView = 'fiches';
 function setPart(p){
   const changed = p !== PART;
@@ -1371,9 +1619,13 @@ function setPart(p){
 }
 function show(){
   let h = location.hash.slice(1);
+  const isJour = h === 'jour';
   const p = h.startsWith('c-') ? 'cart' : h.startsWith('p-') ? 'proc' : 'inf';
   if (p !== 'inf') h = h.slice(2);
-  setPart(p);
+  if (!isJour) setPart(p);
+  else { document.querySelectorAll('.part-switch a').forEach(a => a.removeAttribute('aria-current')); $('h-title').textContent = 'Révision du jour'; $('h-kicker').textContent = 'Répétition espacée · infractions et procédure'; }
+  document.body.classList.toggle('in-jour', isJour);
+  $('streak-chip').toggleAttribute('aria-current', isJour);
   currentView = VIEWS.includes(h) ? h : 'fiches';
   VIEWS.forEach(v => $('v-' + v).hidden = v !== currentView);
   const cv = $('v-' + currentView); cv.classList.remove('enter'); void cv.offsetWidth; cv.classList.add('enter');
@@ -1385,12 +1637,19 @@ function refresh(){
   if (currentView === 'fiches') renderFiches();
   else if (currentView === 'flashcards') { buildDeck(); renderFC(); }
   else if (currentView === 'quiz') renderQuizIntro();
+  else if (currentView === 'jour') renderJour();
   else renderRC(false);
 }
 window.addEventListener('hashchange', show);
 
 document.addEventListener('keydown', ev => {
   if (ev.target.matches('input, textarea, select')) return;
+  if (currentView === 'jour' && J.active) {
+    if (ev.key === ' ' && !J.flipped) { ev.preventDefault(); jourFlip(); }
+    else if (J.flipped && ev.key === '1') jourGrade(false);
+    else if (J.flipped && ev.key === '2') jourGrade(true);
+    return;
+  }
   if (currentView === 'flashcards') {
     if (ev.key === ' ') { ev.preventDefault(); flip(); }
     else if (ev.key === 'ArrowRight') fcMove(1);
@@ -1418,6 +1677,7 @@ document.addEventListener('keydown', ev => {
   addEventListener('scroll', upd, { passive: true }); addEventListener('resize', upd); addEventListener('hashchange', () => setTimeout(upd, 50));
   b.addEventListener('click', () => scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }));
 })();
+updateChip();
 show();
 </script>
 
