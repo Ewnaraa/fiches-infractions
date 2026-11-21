@@ -747,7 +747,7 @@ function renderFC(){
       <span class="theme">${esc(CTHEMES[e.th].name)}</span>
       <h2>${fmt(e.t.replace(/^NOTA\s*–\s*/, e.nota ? 'Nota : ' : ''))}</h2>
       <span class="qual">${e.nota ? 'Note de l\'articulation' : PART === 'proc' ? `${e.rows.length} point${e.rows.length > 1 ? 's' : ''} à connaître` : 'P.V. N° · JJ/MM/AA à ..h.. · OPJ'}</span>
-      <span class="hint">${e.nota ? 'Que dit cette note ?' : `Récite le contenu ${PART === 'proc' ? 'de la fiche' : 'du cartouche'}, en particulier les mentions en gras.`} Touche la carte pour la retourner.</span>
+      <span class="hint">${e.nota ? 'Que dit cette note ?' : (PART === 'proc' ? 'Récite le contenu de la fiche, en particulier les mentions en gras.' : 'Récite tout le cartouche : mentions en gras et rubriques (identité, cadre juridique, annexes…).')} Touche la carte pour la retourner.</span>
     </div>`;
     box.querySelector('.front').addEventListener('click', flip);
   } else if (!FC.flipped) {
@@ -1570,7 +1570,7 @@ function renderJourCard(){
   const box = $('jour-panel'), x = J.q[J.i], e = x.it;
   const front = x.p === 'inf'
     ? `<span class="theme">N° ${e.n} · ${esc(THEMES[e.th].name)}</span><h2>${esc(e.t)}</h2><span class="qual">${esc(e.q)}</span><div class="dots"><span class="d1">Matériel</span><span class="d2">Moral</span><span class="d3">Légal</span></div>`
-    : `<span class="theme">${esc(DS[x.p].themes[e.th].name)}</span><h2>${fmt(e.t)}</h2><span class="qual">${x.p === 'cart' ? 'Cartouche · récite les mentions en gras' : 'Procédure'}</span>`;
+    : `<span class="theme">${esc(DS[x.p].themes[e.th].name)}</span><h2>${fmt(e.t)}</h2><span class="qual">${x.p === 'cart' ? 'Cartouche · récite tout le contenu : mentions en gras et rubriques' : 'Procédure'}</span>`;
   const back = x.p === 'inf' ? withPart('inf', () => cardHTML(e, { noStatus: true })) : withPart(x.p, () => cartHTML(e, { noStatus: true }));
   box.innerHTML = `
     <div class="fc-meta"><span>${J.i + 1} / ${J.q.length}</span><span class="pill ${x.kind === 'new' ? 'mat' : 'mor'}">${x.kind === 'new' ? 'Nouvelle' : x.kind === 'again' ? 'À reprendre' : 'À revoir'}</span></div>
